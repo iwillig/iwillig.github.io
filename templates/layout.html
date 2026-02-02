@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Welcome{% endblock %} — Software Wanderings</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="{{ '/static/style.css'|url }}">
+  <link rel="stylesheet" href="{{ get_pygments_stylesheet()|url }}">
+</head>
+<body>
+  <div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+      <div class="header">
+        <h1 class="brand-title"><a href="{{ '/'|url }}">Software Wanderings</a></h1>
+        <h2 class="brand-tagline">Thoughts on code, craft, and curiosity</h2>
+
+        <nav class="nav">
+          <ul class="nav-list">
+            <li class="nav-item{% if this._path == '/' %} nav-item-active{% endif %}">
+              <a class="pure-button" href="{{ '/'|url }}">Home</a>
+            </li>
+            {% for child in site.get('/').children %}
+              {% if child._id in ['blog', 'about', 'projects'] %}
+            <li class="nav-item{% if this.is_child_of(child._path) %} nav-item-active{% endif %}">
+              <a class="pure-button" href="{{ child|url }}">{{ child.title }}</a>
+            </li>
+              {% endif %}
+            {% endfor %}
+            <li class="nav-item">
+              <a class="pure-button" href="{{ '/static/resume.html'|url }}">Resume</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+      <div class="posts">
+        {% block body %}{% endblock %}
+      </div>
+
+      <div class="footer">
+        <p>&copy; 2026 Ivan Willig. Built with <a href="https://www.getlektor.com/">Lektor</a> and <a href="https://purecss.io/">Pure CSS</a>.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

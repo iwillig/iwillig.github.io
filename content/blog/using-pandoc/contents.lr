@@ -1,0 +1,432 @@
+title: Using Pandoc to build a technical manual
+---
+pub_date: 2025-01-04
+---
+author: Ivan Willig
+---
+body:
+
+[Pandoc](https://pandoc.org/index.html) is a markup transformation
+tool that allows you to convert from any format into any format. It's
+a helpful tool for any software engineer working in any language.
+
+This guide is going to walk you through building a "technical manual"
+with [Pandoc](https://pandoc.org/index.html). For our goals, the
+technical manual will be a collection of Markdown documents with
+[PlantUML](https://plantuml.com/) diagrams. We will use Pandoc to
+combine these documents into a single HTML page and render the
+PlantUML diagrams as SVG images. We will use pandoc filters to render
+PlantUML diagrams and to include source code from your project.
+
+The goal is to give you the reader enough understanding of Pandoc to
+build your own documentation system with Pandoc.
+
+#### Install
+
+You can install Pandoc on MacOS with homebrew
+
+```bash
+## Install
+$ brew install pandoc
+```
+
+On Fedora with
+
+```bash
+## Fedora
+sudo dnf install pandoc
+```
+
+Or with Guix
+
+```bash
+## GNU Guix Linux
+guix install pandoc
+```
+
+#### Introduction to Pandoc
+
+Let's say you have a simple HTML document. Something like.
+
+```html
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Software Wanderings" />
+</head>
+<body>
+
+  <h1>Hello</h1>
+  <ul>
+    <li>one item</li>
+    <li>two item</li>
+    <li>three item</li>
+  </ul>
+  <a href="/">Releative reference</a>
+
+
+  <table>
+    <tr>
+      <th>Company</th>
+      <th>Contact</th>
+      <th>Country</th>
+    </tr>
+    <tr>
+      <td>Alfreds Futterkiste</td>
+      <td>Maria Anders</td>
+      <td>Germany</td>
+    </tr>
+    <tr>
+      <td>Centro comercial Moctezuma</td>
+      <td>Francisco Chang</td>
+      <td>Mexico</td>
+    </tr>
+  </table>
+
+  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" role="img">
+    <title>A gradient</title>
+    <linearGradient id="gradient">
+      <stop class="begin" offset="0%" stop-color="red" />
+      <stop class="end" offset="100%" stop-color="black" />
+    </linearGradient>
+    <rect x="0" y="0" width="100" height="100" style="fill:url(#gradient)" />
+    <circle cx="50" cy="50" r="30" style="fill:url(#gradient)" />
+  </svg>
+
+
+</body>
+```
+
+One could convert that from HTML into markdown with the following
+command.
+
+```bash
+pandoc -f html -t markdown public/about.html
+cat public/about.html | pandoc -f html -t markdown
+```
+
+Which produces the following output
+
+```markdown
+# Hello
+
+-   one item
+-   two item
+-   three item
+
+[Releative reference](/)
+
+  Company                      Contact           Country
+  ---------------------------- ----------------- ---------
+  Alfreds Futterkiste          Maria Anders      Germany
+  Centro comercial Moctezuma   Francisco Chang   Mexico
+
+![](data:image/svg+xml;base64,PHN2ZyB2aWV3Ym94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVhc3BlY3RyYXRpbz0ieE1pZFlNaWQgc2xpY2UiIHJvbGU9ImltZyI+CiAgICA8dGl0bGU+QSBncmFkaWVudDwvdGl0bGU+CiAgICA8bGluZWFyZ3JhZGllbnQgaWQ9ImdyYWRpZW50Ij4KICAgICAgPHN0b3AgY2xhc3M9ImJlZ2luIiBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSJyZWQiPjwvc3RvcD4KICAgICAgPHN0b3AgY2xhc3M9ImVuZCIgb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJibGFjayI+PC9zdG9wPgogICAgPC9saW5lYXJncmFkaWVudD4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBzdHlsZT0iZmlsbDp1cmwoI2dyYWRpZW50KSI+PC9yZWN0PgogICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMzAiIHN0eWxlPSJmaWxsOnVybCgjZ3JhZGllbnQpIj48L2NpcmNsZT4KICA8L3N2Zz4=)
+```
+
+Or Emacs's [Org Mode](https://orgmode.org/)
+
+```org
+* Hello
+  :PROPERTIES:
+  :CUSTOM_ID: hello
+  :END:
+
+- one item
+- two item
+- three item
+
+[[/][Releative reference]]
+
+| Company                    | Contact         | Country |
+|----------------------------+-----------------+---------|
+| Alfreds Futterkiste        | Maria Anders    | Germany |
+| Centro comercial Moctezuma | Francisco Chang | Mexico  |
+
+[[data:image/svg+xml;base64,PHN2ZyB2aWV3Ym94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVhc3BlY3RyYXRpbz0ieE1pZFlNaWQgc2xpY2UiIHJvbGU9ImltZyI+CiAgICA8dGl0bGU+QSBncmFkaWVudDwvdGl0bGU+CiAgICA8bGluZWFyZ3JhZGllbnQgaWQ9ImdyYWRpZW50Ij4KICAgICAgPHN0b3AgY2xhc3M9ImJlZ2luIiBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSJyZWQiPjwvc3RvcD4KICAgICAgPHN0b3AgY2xhc3M9ImVuZCIgb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJibGFjayI+PC9zdG9wPgogICAgPC9saW5lYXJncmFkaWVudD4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBzdHlsZT0iZmlsbDp1cmwoI2dyYWRpZW50KSI+PC9yZWN0PgogICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMzAiIHN0eWxlPSJmaWxsOnVybCgjZ3JhZGllbnQpIj48L2NpcmNsZT4KICA8L3N2Zz4=]]
+```
+
+Pandoc also have a native and JSON output format. When you select
+this, the raw AST that Pandoc generates from your document is
+returned. Let's take a quick peak at this AST.
+
+```bash
+pandoc code-examples/sample.html -f html -t json | jq > code-examples/sample.json
+```
+
+```json
+        ]
+      ]
+    },
+    {
+      "t": "BulletList",
+      "c": [
+        [
+          {
+            "t": "Plain",
+            "c": [
+              {
+                "t": "Str",
+                "c": "one"
+              },
+              {
+                "t": "Space"
+              },
+              {
+                "t": "Str",
+                "c": "item"
+              }
+```
+
+We can clearly see now Pandoc is a transformation system. It parses a
+document into its native AST. It then has a set of printers that take
+that AST and render the document into that format.
+
+```
+INPUT --reader--> AST --filter--> AST --writer--> OUTPUT
+```
+
+
+Taken from the [Pandoc Website](https://pandoc.org/filters.html)
+
+#### Building your technical document
+
+Now that we understand the basics of how Pandoc works, we are going to
+use it to build a technical manual. We have three main goals with this
+manual. We want to use PlantUML to draw diagram and we want to be able
+to include code fragments in our main document. Also we want to use
+Markdown for our content.
+
+- PlantUML based digrams
+- Include code modules
+- Markdown based
+
+#### Setup
+
+We want to use a Markdown file for each section. We are going to use a
+justfile to build our document into a single HTML document. [just](https://github.com/casey/just) 
+is a modern command runner that's simpler and more intuitive than Make. 
+The rough structure for our manual will be as follows.
+
+- **justfile**
+- **metadata.yml**
+- **sections/introduction.md**
+- **sections/architecture.md**
+
+First, let's create a Pandoc metadata file. Pandoc uses yaml for
+metadata. You can include the metadata in a file or in a separate
+file.
+
+Create a file called **metadata.yml** with the following content.
+
+
+```yaml
+title: "Software alchemist Docs"
+author: "Ivan Willig"
+email: "iwillig@gmail.com"
+description: "Software Alchemist Docs"
+lang: "en-US"
+toc-title: "Table of Contents"
+sections:
+  - chapters/introduction.org
+  - chapters/design.org
+
+css:
+  - css/pico.min.css
+  - css/docs.css
+  - css/highlighting.css
+```
+
+Now let's create a `justfile` to automate our build process. Install just with:
+
+```bash
+# macOS
+brew install just
+
+# Or with cargo
+cargo install just
+```
+
+Create a file called **justfile** with the following content:
+
+```makefile
+# Build the documentation
+default: docs.html
+
+# Generate HTML documentation from markdown sources
+docs.html: sections/*.md metadata.yml
+	pandoc metadata.yml \
+		--toc --toc-depth=5 \
+		--template templates/template.html \
+		--highlight-style zenburn \
+		-F pandoc-plantuml \
+		-f markdown -t html \
+		sections/introduction.md \
+		sections/architecture.md \
+		-o docs.html
+
+# Clean generated files
+clean:
+	rm -f docs.html
+	rm -f plantuml-images/*.svg
+	rm -f plantuml-images/*.uml
+
+# Watch for changes and rebuild
+watch:
+	watchexec -e md,yml just
+```
+
+You can now build your documentation by simply running:
+
+```bash
+just
+```
+
+Or clean up with:
+
+```bash
+just clean
+```
+
+
+
+#### Using Pandoc filters
+
+Pandoc filters allow you to manipulate the AST between the reader and writer stages. 
+This is where the real power of Pandoc comes in - you can extend it to handle custom 
+markup or integrate with external tools.
+
+For our technical manual, we're using the `pandoc-plantuml` filter to render PlantUML 
+diagrams. Install it with:
+
+```bash
+pip install pandoc-plantuml
+```
+
+You'll also need PlantUML itself:
+
+```bash
+# macOS
+brew install plantuml
+
+# Or download the JAR file
+# https://plantuml.com/download
+```
+
+Now you can include PlantUML diagrams directly in your Markdown:
+
+```markdown
+## Architecture Diagram
+
+```plantuml
+@startuml
+actor User
+participant "Web Server" as Web
+participant "Database" as DB
+
+User -> Web: HTTP Request
+Web -> DB: Query
+DB --> Web: Result
+Web --> User: HTTP Response
+@enduml
+` ``
+```
+
+The filter will automatically convert these code blocks into SVG images when you build 
+your documentation.
+
+You can also write custom filters in Python. Here's a simple example that converts 
+emphasized text to uppercase:
+
+```python
+#!/usr/bin/env python3
+from pandocfilters import toJSONFilter, Emph, Str
+
+def caps(key, value, format, meta):
+    if key == 'Emph':
+        return [Str(value[0]['c'].upper())]
+
+if __name__ == "__main__":
+    toJSONFilter(caps)
+```
+
+#### Pandoc templates
+
+Each output format has a template. You can generate the template using
+Pandoc itself.
+
+```bash
+pandoc -D html
+```
+
+Which outputs the following template. You can read more about Pandoc's
+template syntax
+[here](https://pandoc.org/chunkedhtml-demo/6.1-template-syntax.html).
+
+```html
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="$lang$" xml:lang="$lang$"$if(dir)$ dir="$dir$"$endif$>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+$for(author-meta)$
+  <meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+  <meta name="dcterms.date" content="$date-meta$" />
+$endif$
+<!-- ... rest of template ... -->
+```
+
+You can customize this template to add your own CSS, JavaScript, or HTML structure. 
+Save your custom template and reference it with the `--template` flag as shown in the 
+justfile above.
+
+#### Getting Started Quickly with a Template
+
+If you want to get started quickly without setting everything up from scratch, I've 
+created a cookiecutter template that includes all of these tools pre-configured:
+
+**[pandoc-documentation-tool](https://github.com/iwillig/pandoc-documenation-tool/)**
+
+This template includes:
+- Pre-configured justfile with common tasks
+- Sample metadata.yml
+- Example markdown sections
+- HTML template with responsive CSS
+- PlantUML filter setup
+- Code inclusion utilities
+- Example diagrams and structure
+
+You can use it to bootstrap a new documentation project:
+
+```bash
+# Install cookiecutter if you haven't already
+pip install cookiecutter
+
+# Generate a new project from the template
+cookiecutter gh:iwillig/pandoc-documenation-tool
+```
+
+The template will ask you a few questions (project name, author, etc.) and generate 
+a complete documentation project structure. You can then customize it to fit your needs.
+
+#### Conclusion
+
+Pandoc is a powerful tool for building technical documentation. By combining Markdown, 
+PlantUML, and Pandoc filters, you can create maintainable, version-controlled documentation 
+that lives alongside your code. The use of `just` as a command runner makes the build 
+process simple and reproducible.
+
+Key takeaways:
+- Pandoc converts between formats by parsing to an AST and then rendering
+- Filters let you extend Pandoc's capabilities
+- Templates allow you to customize the output
+- PlantUML integration enables version-controlled diagrams
+- `just` provides a simple, modern way to automate builds
+- The cookiecutter template gives you a head start
+
+Now you have everything you need to build your own technical manual. Start with the 
+cookiecutter template, or build your own setup from scratch using the examples in this 
+guide. Happy documenting!

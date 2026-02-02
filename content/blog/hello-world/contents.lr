@@ -1,0 +1,35 @@
+title: Hello, World
+---
+pub_date: 2024-12-28
+---
+author: Ivan Willig
+---
+body:
+
+> **Note:** This post is a bit out of date. I no longer use GNU Guix and Haunt for this blog. Instead, I've migrated to [Lektor](https://www.getlektor.com/) as my static site generator, with Pandoc still handling resume generation.
+
+Welcome to Software Wanderings, a technical blog where I'll be documenting my experiences, learnings, and observations about software engineering. I hope this blog will encourage me to write about my experiences and share them with a broader audience.
+
+The blog will explore software design, functional programming, API design and more. While I primarily work in Clojure, I'll also cover JavaScript, TypeScript, Rust, Scheme, and SQL.
+
+## 2025 Goals
+
+I have five primary objectives for the year:
+
+1. **Game Development**: Learn to build real-time strategy games inspired by Command and Conquer and StarCraft
+2. **Immutable Linux**: Study NixOS, GNU Guix, and Fedora Silverblue distributions
+3. **Pandoc Mastery**: Understand document transformation systems
+4. **API Design**: Deepen my knowledge of REST and GraphQL architectures
+5. **Technical Writing**: Publish insights throughout the year
+
+## Technical Architecture
+
+This blog's infrastructure uses:
+
+- **GitHub Pages** for hosting
+- **Haunt** (a static site generator) for template processing
+- **Pandoc** for Markdown preprocessing with advanced diagram support
+- **GNU Make** for build orchestration
+- **GNU Guix** for dependency management
+
+The setup requires Pandoc, PlantUML, and Haunt, with a custom GNU Guix manifest handling dependencies.

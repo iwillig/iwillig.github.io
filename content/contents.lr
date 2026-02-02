@@ -1,0 +1,9 @@
+title: Welcome to Software Wanderings!
+---
+body:
+
+A technical blog documenting experiences, learnings, and observations about software engineering.
+
+I write about software design, functional programming, API design and more, with a focus on Clojure and other languages including JavaScript, TypeScript, Rust, Scheme, and SQL.
+
+Check out the [blog](/blog/) for my latest posts, or learn more [about me](/about/).

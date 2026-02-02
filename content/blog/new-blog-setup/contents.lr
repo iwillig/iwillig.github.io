@@ -1,0 +1,33 @@
+title: New Blog Setup
+---
+pub_date: 2026-02-02
+---
+author: Ivan Willig
+---
+body:
+
+I've migrated this blog to a new setup. Here's how it works now:
+
+## Stack
+
+- **[Lektor](https://www.getlektor.com/)** - Static site generator with a nice content model
+- **[Pandoc](https://pandoc.org/)** - Builds my resume from YAML to HTML
+- **[just](https://github.com/casey/just)** - Command runner for build tasks
+- **[GitHub Actions](https://github.com/features/actions)** - Automatic deployment on push to main
+- **[PureCSS](https://purecss.io/)** - Lightweight CSS framework
+
+## How It Works
+
+Content lives in YAML and Lektor's `.lr` files. The build process:
+
+1. `just resume` - Pandoc converts `src/resume.yml` to HTML using a custom template
+2. `lektor build` - Lektor builds the rest of the site
+3. GitHub Actions deploys to GitHub Pages on every push
+
+## Why Lektor?
+
+I really enjoyed using GNU Guix and Haunt. Guix is a fantastic package manager with reproducible builds, and Haunt is a lovely Scheme-based static site generator. However, I wanted something that runs easily on macOS without needing a Linux VM or container.
+
+More importantly, I wanted to focus on writing blog posts, not building and maintaining my own blogging system. Lektor has a clean content model, and just works out of the box.
+
+The full source is on [GitHub](https://github.com/iwillig/iwillig.github.io).

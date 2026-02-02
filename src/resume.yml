@@ -1,0 +1,98 @@
+---
+title: Resume
+firstname: Ivan
+lastname: Willig
+jobtitle: Senior Software Engineer
+github: iwillig
+address:
+  street: 280 Ocean Parkway
+  city: Brooklyn
+  country: USA
+email: iwillig@gmail.com
+linkedin: ivan-willig-28435b10
+homepage: iwillig.me
+
+education:
+  - school: College of the Atlantic
+    degree: Bachelor of Arts, June 2008
+
+language-skills:
+  - Clojure
+  - Python
+  - JavaScript
+  - Scheme
+  - TypeScript
+  - Java
+  - PHP
+
+summary: >-
+  Proven senior software engineer and founding engineer at Shortcut
+  (formerly Clubhouse). Senior full-stack engineer with an in-depth
+  understanding of how to balance engineering and business needs.
+
+experience:
+  - dates: March 2015 - Present
+    employer: Shortcut (formally Clubhouse)
+    title: Senior Software Engineer
+    city: New York
+    description: >-
+      Founding backend engineer. Developed the initial
+      software. Design the majority of the data model and REST
+      API. Lead the hiring efforts for the backend team for
+      years. Managed the backend team and grew it. Lead numerous
+      projects, including the adoption of GraphQL and React.js and the
+      launch of a second product. Tech lead for all of these projects.
+
+  - dates: September 2014 to March 2015
+    employer: Mapzen
+    title: Software Engineer
+    city: New York
+    description: >-
+      Led efforts to adopt more modern JavaScript design patterns in a
+      complex front end project (tangram). Handled all infrastructure
+      work and compiler support.
+
+  - dates: July 2013 to August 2014
+    employer: Intent Media
+    title: Software Engineer
+    city: New York
+    description: >-
+      Designed and developed a node based reporting system with an eye
+      to improving reliability of the existing system. Helped maintain
+      and grow a large JavaScript library. Focused on solving third
+      party JavaScript related issues while expanding the network to
+      new travel sites.
+
+  - dates: January 2012 to June 2013
+    employer: OpenGeo
+    title: Software Engineer
+    city: New York
+    description: >-
+      Helped rewrite the GeoNode project. Focused on code quality,
+      feature completeness and improving test coverage. Provided
+      custom cartographic work for the Nielsen Company and their
+      demographic data.  Did customer-facing support.
+
+  - dates: September 2010 January 2012
+    employer: Earth Instiute
+    title: Software Engineer
+    city: New York
+    description: >-
+      Developed an SMS text-message-based billing gateway for a
+      micro-power-grid system. Developed custom software to interface
+      with telecommunication providers in Uganda and Mali. Supported
+      field team in three countries. Traveled internationally to
+      deploy custom hardware in the field.
+
+  - dates: September 2008 to September 2010
+    employer: The Open Planning Project
+    title: Software Engineer
+    city: New York
+    description: >-
+      Provided NGOs and governments with critical maintenance and
+      configuration services for virtual machines and
+      servers. Developed web applications using Django and Python,
+      including a World Bank-funded collaborative mapping
+      utility. Conceived, managed, and designed a web application that
+      allows citizens to connect to government resources.
+...
