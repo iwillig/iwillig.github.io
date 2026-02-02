@@ -1,0 +1,5 @@
+[project]
+name = Software Wanderings
+
+[servers.ghpages]
+target = ghpages://iwillig/iwillig.github.io
