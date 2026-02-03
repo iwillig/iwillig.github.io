@@ -59,11 +59,16 @@ def plantuml_encode(text):
 _svg_cache = {}
 
 
-def fetch_plantuml_svg(text, server_url="http://www.plantuml.com/plantuml"):
+def fetch_plantuml_svg(text, server_url="http://www.plantuml.com/plantuml", timeout=120):
     """
     Fetch rendered SVG from PlantUML server.
 
     Uses in-memory caching to avoid re-fetching unchanged diagrams.
+    
+    Args:
+        text: PlantUML diagram text
+        server_url: PlantUML server URL
+        timeout: Request timeout in seconds (default: 120)
     """
     # Check cache first
     cache_key = text.strip()
@@ -74,7 +79,7 @@ def fetch_plantuml_svg(text, server_url="http://www.plantuml.com/plantuml"):
     url = f"{server_url}/svg/{encoded}"
 
     try:
-        response = requests.get(url, timeout=30)
+        response = requests.get(url, timeout=timeout)
         response.raise_for_status()
         svg = response.text
 
@@ -87,9 +92,13 @@ def fetch_plantuml_svg(text, server_url="http://www.plantuml.com/plantuml"):
         return error_msg
 
 
-def make_plantuml_renderer_mixin(server_url):
+def make_plantuml_renderer_mixin(server_url, timeout=120):
     """
     Create a renderer mixin class that handles plantuml code blocks.
+    
+    Args:
+        server_url: PlantUML server URL
+        timeout: Request timeout in seconds
     """
     class PlantUMLRendererMixin:
         def block_code(self, code, lang=None):
@@ -102,7 +111,7 @@ def make_plantuml_renderer_mixin(server_url):
                 lang = lang.strip()
 
             if lang == "plantuml":
-                svg = fetch_plantuml_svg(code, server_url)
+                svg = fetch_plantuml_svg(code, server_url, timeout)
                 return f'<div class="plantuml-diagram">{svg}</div>\n'
 
             # Delegate to the next class in MRO for non-plantuml blocks
@@ -120,10 +129,20 @@ class PlantUMLPlugin(Plugin):
         config = self.get_config()
         return config.get("server", "http://www.plantuml.com/plantuml")
 
+    def get_timeout(self):
+        """Get request timeout from config or use default (120 seconds)."""
+        config = self.get_config()
+        timeout = config.get("timeout", "120")
+        try:
+            return int(timeout)
+        except ValueError:
+            return 120
+
     def on_markdown_config(self, config, **extra):
         """Hook into markdown configuration to add our renderer mixin."""
         server_url = self.get_server_url()
-        mixin = make_plantuml_renderer_mixin(server_url)
+        timeout = self.get_timeout()
+        mixin = make_plantuml_renderer_mixin(server_url, timeout)
         # Insert at position 0 so our mixin is first in MRO and handles
         # plantuml blocks before other plugins (like markdown-highlighter)
         config.renderer_mixins.insert(0, mixin)
