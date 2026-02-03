@@ -4,3 +4,6 @@ tagline = Thoughts on code, craft, and curiosity
 
 [servers.ghpages]
 target = ghpages://iwillig/iwillig.github.io
+
+[packages]
+lektor-markdown-header-anchors = 0.3.1

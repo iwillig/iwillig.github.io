@@ -14,6 +14,17 @@
     {% endif %}
     &middot; {{ post.pub_date.strftime('%B %d, %Y') }}
   </p>
+  {% if not from_index and post.body.toc %}
+  <nav class="toc-container">
+    <h4>Table of Contents</h4>
+    <ul class="toc">
+    {% for item in post.body.toc recursive %}
+      <li><a href="#{{ item.anchor }}">{{ item.title }}</a>
+      {%- if item.children %}<ul>{{ loop(item.children) }}</ul>{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
   <div class="post-body">
     {{ post.body }}
   </div>
