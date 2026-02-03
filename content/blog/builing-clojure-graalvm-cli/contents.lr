@@ -1,0 +1,111 @@
+title: Builing Clojure GraalVM CLI
+---
+author: Ivan Willig
+---
+body:
+
+Command line tools are having a bit of a revival as of late. The rise
+of LLM Agents has given new reasons for people to focus on command
+line tools. Histroical Clojure suffered from long stardup times on the
+JVM. Over the years, both our computers and the JVM became faster so
+this less of an issues. Using a JAR based command line tool is still
+slower than something written in Go or Node.js.
+
+Luckly, we have the GraalVM system to improve this. Just to give an
+example, I am working on a new tool for LLM agetns. Its written in Clojure
+and is compiled to native code via the GraalVM.
+
+The Jar version of this command runs in about `1.2 seconds`
+
+```shell
+time java -jar target/plan.jar --help
+```
+
+The GraalVM compliled version is about `287.53 millis`
+
+```shell
+time time ./plan --help
+```
+
+LLM Agents can already be kind of slow tools. Adding an additional
+~1.5 seconds to each interaction can really interrupt your develoment
+flow.
+
+This post is a guide on how you can build a simple Clojure based
+command line tool. We are going to use the Clojure and Babashka tools
+to compile our application to a native tool. We will use the
+execellent [clj-matic](https://github.com/l3nz/cli-matic) library to
+parese the command line tools and define sub commands.
+
+# Tools
+
+Lets install the tools we need. We will need
+
+- [Clojure]()
+- [Babashka](https://babashka.org/)
+- [SDKMan](https://sdkman.io/)
+
+With homebrew, you can install these with the following command
+
+```shell
+brew install borkdude/brew/babashka clojure/tools/clojure
+```
+
+And sdkman
+
+```shell
+brew tap sdkman/tap
+brew install sdkman-cli
+```
+
+# Project setup
+
+Lets just follow the standard pattern for clojure projects
+
+You can create a new clojure from stracth with this command
+
+```shell
+clojure -Tnew app :name iwillig/cli-example
+```
+
+This will create a new basic Clojure application in the `cli-example` folder.
+
+```
+.
+├── build.clj
+├── CHANGELOG.md
+├── deps.edn
+├── doc
+│   └── intro.md
+├── LICENSE
+├── README.md
+├── resources
+├── src
+│   └── iwillig
+│       └── cli_example.clj
+└── test
+    └── iwillig
+        └── cli_example_test.clj
+
+7 directories, 8 files
+```
+
+The cli-example namespace will have the core of the template app,
+
+```clojure
+(ns iwillig.cli-example
+  (:gen-class))
+
+(defn greet
+  "Callable entry point to the application."
+  [data]
+  (println (str "Hello, " (or (:name data) "World") "!")))
+
+(defn -main
+  "I don't do a whole lot ... yet."
+  [& args]
+  (greet {:name (first args)}))
+```
+
+---
+pub_date: 2026-02-02
