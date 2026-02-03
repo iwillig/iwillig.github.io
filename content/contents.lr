@@ -1,4 +1,4 @@
-title: Relections on Software Engineering
+title: Reflections on Software Engineering
 ---
 body:
 
@@ -6,9 +6,17 @@ A technical blog documenting experiences, learnings, and observations
 about software engineering.
 
 I write about software design, functional programming, API design and
-more, with a focus on Clojure and other languages including
-JavaScript, TypeScript, Rust, Scheme, and SQL.
+more, with a focus on [Clojure](https://clojure.org/) and other
+languages including JavaScript, Python, TypeScript, Scheme, and SQL.
 
+I have worked extensively with both traditional "Relational"/SQL
+Database and non-traditional "NoSQL" databases. For the last ten years,
+I have used both [Datomic](https://www.datomic.com/) and
+[PostgreSQL](https://www.postgresql.org/).
+
+I also have worked extensively with the
+[PostGIS](https://postgis.net/) (and [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)) spatial extensions to
+PostgreSQL and SQLite3.
 
 Check out the [blog](/blog/) for my latest posts, or learn more [about
 me](/about/).
