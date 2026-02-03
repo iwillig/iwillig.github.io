@@ -1,4 +1,4 @@
-title: Using Pandoc to build a technical manual
+title: Using Pandoc to Build a Technical Manual
 ---
 pub_date: 2025-01-04
 ---
@@ -7,46 +7,42 @@ author: Ivan Willig
 body:
 
 [Pandoc](https://pandoc.org/index.html) is a markup transformation
-tool that allows you to convert from any format into any format. It's
-a helpful tool for any software engineer working in any language.
+tool that converts documents between formats. It's an invaluable tool
+for any software engineer who works with documentation.
 
-This guide is going to walk you through building a "technical manual"
-with [Pandoc](https://pandoc.org/index.html). For our goals, the
-technical manual will be a collection of Markdown documents with
-[PlantUML](https://plantuml.com/) diagrams. We will use Pandoc to
-combine these documents into a single HTML page and render the
-PlantUML diagrams as SVG images. We will use pandoc filters to render
-PlantUML diagrams and to include source code from your project.
+In this guide, we'll build a "technical manual" using Pandoc. Our
+manual will be a collection of Markdown documents with
+[PlantUML](https://plantuml.com/) diagrams. We'll use Pandoc to
+combine these documents into a single HTML page, rendering PlantUML
+diagrams as SVG images. Along the way, we'll explore Pandoc filters
+for rendering diagrams and including source code from your project.
 
-The goal is to give you the reader enough understanding of Pandoc to
-build your own documentation system with Pandoc.
+By the end of this guide, you'll have enough understanding of Pandoc
+to build your own documentation system.
 
-#### Install
+#### Installation
 
-You can install Pandoc on MacOS with homebrew
+You can install Pandoc on macOS with Homebrew:
 
 ```bash
-## Install
-$ brew install pandoc
+brew install pandoc
 ```
 
-On Fedora with
+On Fedora:
 
 ```bash
-## Fedora
 sudo dnf install pandoc
 ```
 
-Or with Guix
+Or with GNU Guix:
 
 ```bash
-## GNU Guix Linux
 guix install pandoc
 ```
 
 #### Introduction to Pandoc
 
-Let's say you have a simple HTML document. Something like.
+Let's say you have a simple HTML document:
 
 ```html
 <!DOCTYPE html>
@@ -62,7 +58,7 @@ Let's say you have a simple HTML document. Something like.
     <li>two item</li>
     <li>three item</li>
   </ul>
-  <a href="/">Releative reference</a>
+  <a href="/">Relative reference</a>
 
 
   <table>
@@ -97,8 +93,8 @@ Let's say you have a simple HTML document. Something like.
 </body>
 ```
 
-One could convert that from HTML into markdown with the following
-command.
+You can convert this from HTML to Markdown with the following
+command:
 
 ```bash
 pandoc -f html -t markdown public/about.html
@@ -114,7 +110,7 @@ Which produces the following output
 -   two item
 -   three item
 
-[Releative reference](/)
+[Relative reference](/)
 
   Company                      Contact           Country
   ---------------------------- ----------------- ---------
@@ -146,9 +142,9 @@ Or Emacs's [Org Mode](https://orgmode.org/)
 [[data:image/svg+xml;base64,PHN2ZyB2aWV3Ym94PSIwIDAgMTAwIDEwMCIgcHJlc2VydmVhc3BlY3RyYXRpbz0ieE1pZFlNaWQgc2xpY2UiIHJvbGU9ImltZyI+CiAgICA8dGl0bGU+QSBncmFkaWVudDwvdGl0bGU+CiAgICA8bGluZWFyZ3JhZGllbnQgaWQ9ImdyYWRpZW50Ij4KICAgICAgPHN0b3AgY2xhc3M9ImJlZ2luIiBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSJyZWQiPjwvc3RvcD4KICAgICAgPHN0b3AgY2xhc3M9ImVuZCIgb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJibGFjayI+PC9zdG9wPgogICAgPC9saW5lYXJncmFkaWVudD4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBzdHlsZT0iZmlsbDp1cmwoI2dyYWRpZW50KSI+PC9yZWN0PgogICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMzAiIHN0eWxlPSJmaWxsOnVybCgjZ3JhZGllbnQpIj48L2NpcmNsZT4KICA8L3N2Zz4=]]
 ```
 
-Pandoc also have a native and JSON output format. When you select
-this, the raw AST that Pandoc generates from your document is
-returned. Let's take a quick peak at this AST.
+Pandoc also has native and JSON output formats. When you select
+JSON, the raw AST that Pandoc generates from your document is
+returned. Let's take a quick peek at this AST:
 
 ```bash
 pandoc code-examples/sample.html -f html -t json | jq > code-examples/sample.json
@@ -178,9 +174,9 @@ pandoc code-examples/sample.html -f html -t json | jq > code-examples/sample.jso
               }
 ```
 
-We can clearly see now Pandoc is a transformation system. It parses a
-document into its native AST. It then has a set of printers that take
-that AST and render the document into that format.
+Now we can clearly see that Pandoc is a transformation system. It parses a
+document into its native AST, then uses a set of writers to render
+that AST into the target format:
 
 ```
 INPUT --reader--> AST --filter--> AST --writer--> OUTPUT
@@ -189,35 +185,31 @@ INPUT --reader--> AST --filter--> AST --writer--> OUTPUT
 
 Taken from the [Pandoc Website](https://pandoc.org/filters.html)
 
-#### Building your technical document
+#### Building Your Technical Document
 
-Now that we understand the basics of how Pandoc works, we are going to
-use it to build a technical manual. We have three main goals with this
-manual. We want to use PlantUML to draw diagram and we want to be able
-to include code fragments in our main document. Also we want to use
-Markdown for our content.
+Now that we understand the basics of how Pandoc works, let's use it to
+build a technical manual. We have three main goals:
 
-- PlantUML based digrams
-- Include code modules
-- Markdown based
+- **PlantUML-based diagrams** - Render architecture and sequence diagrams
+- **Code inclusion** - Include code fragments from your project
+- **Markdown-based content** - Write in Markdown for simplicity
 
-#### Setup
+#### Project Setup
 
-We want to use a Markdown file for each section. We are going to use a
-justfile to build our document into a single HTML document. [just](https://github.com/casey/just) 
-is a modern command runner that's simpler and more intuitive than Make. 
-The rough structure for our manual will be as follows.
+We'll use a separate Markdown file for each section and a
+[justfile](https://github.com/casey/just) to build our document into a
+single HTML file. Just is a modern command runner that's simpler and
+more intuitive than Make. Here's our project structure:
 
 - **justfile**
 - **metadata.yml**
 - **sections/introduction.md**
 - **sections/architecture.md**
 
-First, let's create a Pandoc metadata file. Pandoc uses yaml for
-metadata. You can include the metadata in a file or in a separate
-file.
+First, let's create a Pandoc metadata file. Pandoc uses YAML for
+metadata, which you can include inline or in a separate file.
 
-Create a file called **metadata.yml** with the following content.
+Create a file called **metadata.yml** with the following content:
 
 
 ```yaml
@@ -237,7 +229,7 @@ css:
   - css/highlighting.css
 ```
 
-Now let's create a `justfile` to automate our build process. Install just with:
+Now let's create a `justfile` to automate the build process. First, install Just:
 
 ```bash
 # macOS
@@ -276,28 +268,26 @@ watch:
 	watchexec -e md,yml just
 ```
 
-You can now build your documentation by simply running:
+Now you can build your documentation by running:
 
 ```bash
 just
 ```
 
-Or clean up with:
+Or clean up generated files with:
 
 ```bash
 just clean
 ```
 
+#### Using Pandoc Filters
 
+Pandoc filters allow you to manipulate the AST between the reader and
+writer stages. This is where the real power of Pandoc comes in—you can
+extend it to handle custom markup or integrate with external tools.
 
-#### Using Pandoc filters
-
-Pandoc filters allow you to manipulate the AST between the reader and writer stages. 
-This is where the real power of Pandoc comes in - you can extend it to handle custom 
-markup or integrate with external tools.
-
-For our technical manual, we're using the `pandoc-plantuml` filter to render PlantUML 
-diagrams. Install it with:
+For our technical manual, we'll use the `pandoc-plantuml` filter to
+render PlantUML diagrams. Install it with:
 
 ```bash
 pip install pandoc-plantuml
@@ -315,7 +305,7 @@ brew install plantuml
 
 Now you can include PlantUML diagrams directly in your Markdown:
 
-```markdown
+````markdown
 ## Architecture Diagram
 
 ```plantuml
@@ -329,14 +319,14 @@ Web -> DB: Query
 DB --> Web: Result
 Web --> User: HTTP Response
 @enduml
-` ``
 ```
+````
 
-The filter will automatically convert these code blocks into SVG images when you build 
-your documentation.
+The filter automatically converts these code blocks into SVG images
+when you build your documentation.
 
-You can also write custom filters in Python. Here's a simple example that converts 
-emphasized text to uppercase:
+You can also write custom filters in Python. Here's a simple example
+that converts emphasized text to uppercase:
 
 ```python
 #!/usr/bin/env python3
@@ -350,18 +340,18 @@ if __name__ == "__main__":
     toJSONFilter(caps)
 ```
 
-#### Pandoc templates
+#### Pandoc Templates
 
-Each output format has a template. You can generate the template using
-Pandoc itself.
+Each output format has a default template. You can view a format's
+template using Pandoc itself:
 
 ```bash
 pandoc -D html
 ```
 
-Which outputs the following template. You can read more about Pandoc's
-template syntax
-[here](https://pandoc.org/chunkedhtml-demo/6.1-template-syntax.html).
+This outputs the default HTML template. You can read more about
+[Pandoc's template syntax](https://pandoc.org/chunkedhtml-demo/6.1-template-syntax.html)
+in the official documentation.
 
 ```html
 <!DOCTYPE html>
@@ -379,14 +369,14 @@ $endif$
 <!-- ... rest of template ... -->
 ```
 
-You can customize this template to add your own CSS, JavaScript, or HTML structure. 
-Save your custom template and reference it with the `--template` flag as shown in the 
-justfile above.
+You can customize this template to add your own CSS, JavaScript, or
+HTML structure. Save your custom template and reference it with the
+`--template` flag as shown in the justfile above.
 
-#### Getting Started Quickly with a Template
+#### Getting Started Quickly
 
-If you want to get started quickly without setting everything up from scratch, I've 
-created a cookiecutter template that includes all of these tools pre-configured:
+If you want to skip the manual setup, I've created a cookiecutter
+template with everything pre-configured:
 
 **[pandoc-documentation-tool](https://github.com/iwillig/pandoc-documenation-tool/)**
 
@@ -409,24 +399,27 @@ pip install cookiecutter
 cookiecutter gh:iwillig/pandoc-documenation-tool
 ```
 
-The template will ask you a few questions (project name, author, etc.) and generate 
-a complete documentation project structure. You can then customize it to fit your needs.
+The template will prompt you for a project name, author, and other
+details, then generate a complete documentation project. Customize it
+to fit your needs.
 
 #### Conclusion
 
-Pandoc is a powerful tool for building technical documentation. By combining Markdown, 
-PlantUML, and Pandoc filters, you can create maintainable, version-controlled documentation 
-that lives alongside your code. The use of `just` as a command runner makes the build 
-process simple and reproducible.
+Pandoc is a powerful tool for building technical documentation. By
+combining Markdown, PlantUML, and Pandoc filters, you can create
+maintainable, version-controlled documentation that lives alongside
+your code. Using Just as a command runner keeps the build process
+simple and reproducible.
 
-Key takeaways:
-- Pandoc converts between formats by parsing to an AST and then rendering
-- Filters let you extend Pandoc's capabilities
-- Templates allow you to customize the output
+**Key takeaways:**
+
+- Pandoc converts between formats by parsing to an AST, then rendering
+- Filters extend Pandoc's capabilities
+- Templates customize the output format
 - PlantUML integration enables version-controlled diagrams
-- `just` provides a simple, modern way to automate builds
+- Just provides a simple, modern way to automate builds
 - The cookiecutter template gives you a head start
 
-Now you have everything you need to build your own technical manual. Start with the 
-cookiecutter template, or build your own setup from scratch using the examples in this 
-guide. Happy documenting!
+You now have everything you need to build your own technical manual.
+Start with the cookiecutter template, or build your setup from scratch
+using this guide. Happy documenting!

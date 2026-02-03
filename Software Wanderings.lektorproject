@@ -1,5 +1,6 @@
 [project]
-name = Software Wanderings
+name = Relections on Software Engineering
+tagline = Thoughts on code, craft, and curiosity
 
 [servers.ghpages]
 target = ghpages://iwillig/iwillig.github.io
