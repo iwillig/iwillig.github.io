@@ -26,7 +26,16 @@
   </nav>
   {% endif %}
   <div class="post-body">
-    {{ post.body }}
+    {% if from_index %}
+      {% if post.summary %}
+        {{ post.summary }}
+        <p><a href="{{ post|url }}">Read more →</a></p>
+      {% else %}
+        {{ post.body }}
+      {% endif %}
+    {% else %}
+      {{ post.body }}
+    {% endif %}
   </div>
 </article>
 {% endmacro %}

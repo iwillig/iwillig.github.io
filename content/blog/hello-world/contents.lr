@@ -4,6 +4,10 @@ pub_date: 2024-12-28
 ---
 author: Ivan Willig
 ---
+summary:
+
+Welcome to Software Wanderings! This blog explores software design, functional programming, API design, and more. I'll share insights on Clojure, JavaScript, TypeScript, Rust, Scheme, and SQL while documenting my journey through game development, immutable Linux distributions, and technical writing.
+---
 body:
 
 > **Note:** This post is a bit out of date. I no longer use GNU Guix and Haunt for this blog. Instead, I've migrated to [Lektor](https://www.getlektor.com/) as my static site generator, with Pandoc still handling resume generation.

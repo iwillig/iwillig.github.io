@@ -4,6 +4,10 @@ pub_date: 2026-02-02
 ---
 author: Ivan Willig
 ---
+summary:
+
+I've migrated this blog to a new stack: Lektor for static site generation, Pandoc for resume building, and GitHub Actions for deployment. I also created a PlantUML plugin for inline diagram rendering. The focus is on writing content, not maintaining build systems.
+---
 body:
 
 I've migrated this blog to a new setup. Here's how it works now:

@@ -4,6 +4,10 @@ pub_date: 2025-01-04
 ---
 author: Ivan Willig
 ---
+summary:
+
+Learn how to build a technical manual using Pandoc, the universal document converter. This guide covers Pandoc's transformation system, PlantUML diagram rendering, custom filters, and templates. Includes a cookiecutter template to get started quickly with a complete documentation setup.
+---
 body:
 
 [Pandoc](https://pandoc.org/index.html) is a markup transformation
