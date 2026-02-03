@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: lektor-plantuml
+Version: 0.1.0
+Summary: Lektor plugin to render PlantUML diagrams in markdown
+Author: Ivan Willig
+Requires-Dist: requests
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary

@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 lektor = "*"
 lektor-markdown-highlighter = "*"
+requests = "*"
 
 [dev-packages]
 

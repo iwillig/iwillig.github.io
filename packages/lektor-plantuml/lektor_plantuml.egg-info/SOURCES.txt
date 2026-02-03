@@ -1,0 +1,8 @@
+lektor_plantuml.py
+setup.py
+lektor_plantuml.egg-info/PKG-INFO
+lektor_plantuml.egg-info/SOURCES.txt
+lektor_plantuml.egg-info/dependency_links.txt
+lektor_plantuml.egg-info/entry_points.txt
+lektor_plantuml.egg-info/requires.txt
+lektor_plantuml.egg-info/top_level.txt

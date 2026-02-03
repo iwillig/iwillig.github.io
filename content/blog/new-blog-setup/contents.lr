@@ -30,4 +30,23 @@ I really enjoyed using GNU Guix and Haunt. Guix is a fantastic package manager w
 
 More importantly, I wanted to focus on writing blog posts, not building and maintaining my own blogging system. Lektor has a clean content model, and just works out of the box.
 
+## PlantUML Diagrams
+
+I wrote a small Lektor plugin that renders [PlantUML](https://plantuml.com/) diagrams directly in markdown. Just use a fenced code block with `plantuml` as the language:
+
+```plantuml
+@startuml
+actor User
+participant "Lektor" as L
+participant "PlantUML Server" as P
+
+User -> L: Write markdown with PlantUML block
+L -> P: Send encoded diagram
+P --> L: Return SVG
+L --> User: Rendered page with inline diagram
+@enduml
+```
+
+The plugin encodes the diagram text and fetches the rendered SVG from the public PlantUML server at build time. The SVG is embedded inline, so no external requests are made when viewing the page.
+
 The full source is on [GitHub](https://github.com/iwillig/iwillig.github.io).
