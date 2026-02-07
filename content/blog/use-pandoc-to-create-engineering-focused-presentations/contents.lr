@@ -1,0 +1,195 @@
+title: Use pandoc to create engineering-focused presentations.
+---
+author: Ivan Willig
+---
+body:
+
+## Introduction
+
+The blog post describes how I use [pandoc](https://pandoc.org/) and [Slidy](https://www.w3.org/Talks/Tools/Slidy2/) WC3 to build engineering focused presentations.
+
+Software engineering requires a lot of communication with stakeholders, your colleagues, and to LLM agents. There are many ways you can build a presentation these days, but I often find myself using [Pandoc](https://pandoc.org/)'s presentation mode. [Pandoc](https://pandoc.org/) allows me to write a presentation as a simple markdown file. This allows me to commit the presentation to our code repo. It also makes it easier to work with an LLM agent in building or editing your presentation.
+
+I have also used [pandoc](https://pandoc.org/) and its presentation system when working with agents. After I work with the LLM agent, I will often ask it to create a presentation for me using markdown and link to the code. This then allows me to review what the LLM Agent built. It also allows me to share the implementation with my colleagues. Okay, without further ado, let's build our presentation.
+
+We are going to use [pandoc](https://pandoc.org/), [just](https://github.com/casey/just), and [pipenv](https://pipenv.pypa.io/) to build our presentation with PlantUML diagram support.
+
+## Install
+
+First, install the required tools:
+
+```bash
+brew install pandoc just pipenv
+```
+
+Next, create a `Pipfile` in your project directory to manage Python dependencies:
+
+```toml
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pandoc-plantuml-filter = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3"
+```
+
+Install the Python dependencies:
+
+```bash
+pipenv install
+```
+
+## Create Your Presentation
+
+Now let's create a basic presentation document. Save this as `presentation.md`:
+
+`````markdown
+% Engineering Presentation
+% Your Name
+% 2026-02-06
+
+# Project Overview
+
+## Goals
+
+- Improve system reliability
+- Reduce latency by 50%
+- Better observability
+
+## Architecture
+
+# Implementation Details
+
+## Key Changes
+
+- Added caching layer with Redis
+- Implemented circuit breaker pattern
+- Enhanced logging with structured JSON
+
+## Code Example
+
+Here's how we implemented the circuit breaker:
+
+```python
+class CircuitBreaker:
+    def __init__(self, threshold=5):
+        self.failure_count = 0
+        self.threshold = threshold
+        self.state = "closed"
+    
+    def call(self, func):
+        if self.state == "open":
+            raise Exception("Circuit open")
+        try:
+            result = func()
+            self.failure_count = 0
+            return result
+        except Exception as e:
+            self.failure_count += 1
+            if self.failure_count >= self.threshold:
+                self.state = "open"
+            raise e
+```
+
+## System Architecture
+
+```plantuml
+@startuml
+!theme plain
+
+package "Client Layer" {
+  [Web App]
+  [Mobile App]
+}
+
+package "API Layer" {
+  [Load Balancer]
+  [API Gateway]
+  [Circuit Breaker]
+}
+
+package "Service Layer" {
+  [Auth Service]
+  [Cache Service]
+  [Core Service]
+}
+
+database "Data Layer" {
+  [Redis Cache]
+  [PostgreSQL]
+}
+
+[Web App] --> [Load Balancer]
+[Mobile App] --> [Load Balancer]
+[Load Balancer] --> [API Gateway]
+[API Gateway] --> [Circuit Breaker]
+[Circuit Breaker] --> [Auth Service]
+[Circuit Breaker] --> [Core Service]
+[Core Service] --> [Cache Service]
+[Cache Service] --> [Redis Cache]
+[Core Service] --> [PostgreSQL]
+
+@enduml
+```
+
+## Metrics
+
+| Metric      | Before | After | Improvement |
+|-------------|--------|-------|-------------|
+| Latency p99 | 250ms  | 120ms | 52% faster  |
+| Error rate  | 0.5%   | 0.05% | 10x better  |
+| Cache hit   | 0%     | 85%   | New         |
+
+## Next Steps
+
+- Roll out to production
+- Monitor for 1 week
+- Document runbooks
+`````
+
+## Building Your Presentation
+
+Now let's create a `justfile` to automate building our presentation with PlantUML support:
+
+```makefile
+# Default recipe - build the presentation
+default: build
+
+# Build the HTML presentation using Slidy with PlantUML support
+build:
+    pipenv run pandoc -t slidy -s --filter pandoc-plantuml presentation.md -o presentation.html
+
+# Build a self-contained single-file presentation
+build-standalone:
+    pipenv run pandoc -t slidy -s --embed-resources --standalone --filter pandoc-plantuml presentation.md -o presentation.html
+
+# Clean generated files
+clean:
+    rm -f presentation.html
+    rm -rf plantuml-images
+
+# Watch for changes and rebuild
+watch:
+    just build && fswatch -o presentation.md | xargs -n1 -I{} just build
+```
+
+And now let's build our new presentation:
+
+```bash
+just build
+```
+
+This generates `presentation.html` which you can open in any browser. Use the arrow keys to navigate between slides. The [Slidy](https://www.w3.org/Talks/Tools/Slidy2/) format provides a clean, professional look that's perfect for engineering presentations. The PlantUML diagrams will be automatically rendered as SVG images inline in your presentation.
+
+
+
+---
+pub_date: 2026-02-06
+---
+summary: Learn how to create engineering-focused presentations using [pandoc](https://pandoc.org/) and [Slidy](https://www.w3.org/Talks/Tools/Slidy2/). Write your slides in Markdown, version control them with your code, and generate HTML, PDF, or PowerPoint outputs. Perfect for technical teams who prefer code over GUIs.
