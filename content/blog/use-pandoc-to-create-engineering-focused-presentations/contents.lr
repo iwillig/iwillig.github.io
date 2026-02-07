@@ -1,0 +1,105 @@
+title:
+
+Use pandoc to create engineering-focused presentations. 
+---
+author: Ivan Willig
+---
+body:
+
+The blog post describes how I use pandoc and Slidy WC3 to build engineering focused presentations. 
+
+Software engineering requires a lot of communication with stakeholders, your colleagues, and to LLM agents. There are many ways you can build a presentation these days, but I often find myself using Pandoc’s presentation mode. Pandoc allows me to write a presentation as a simple markdown file. This allows me to commit the presentation to our code repo. It also makes it easier to work with an LLM agent in building or editing your presentation.
+
+I have also used pandoc and its presentation system when working with agents. After I work with the LLM agent, I will often ask it to create a presentation for me using markdown and link to the code. This then allows me to review what the LLM Agent built. It also allows me to share the implementation with my colleagues. Okay, without further ado, let's build our presentation. 
+
+https://pandoc.org/demo/example33/10-slide-shows.html 
+
+We are going to use pandoc and [just](https://github.com/casey/just) to build our presentation. 
+
+```bash
+brew install pandoc just
+```
+
+Okay, next let's create a basic presentation document. Save this as `presentation.md`:
+
+```markdown
+% Engineering Presentation
+% Your Name
+% 2026-02-06
+
+# Project Overview
+
+## Goals
+
+- Improve system reliability
+- Reduce latency by 50%
+- Better observability
+
+## Architecture
+
+# Implementation Details
+
+## Key Changes
+
+- Added caching layer with Redis
+- Implemented circuit breaker pattern
+- Enhanced logging with structured JSON
+
+## Metrics
+
+| Metric      | Before | After | Improvement |
+|-------------|--------|-------|-------------|
+| Latency p99 | 250ms  | 120ms | 52% faster  |
+| Error rate  | 0.5%   | 0.05% | 10x better  |
+| Cache hit   | 0%     | 85%   | New         |
+
+## Next Steps
+
+- Roll out to production
+- Monitor for 1 week
+- Document runbooks
+```
+
+Now let's create a `justfile` to automate building our presentation:
+
+```makefile
+# Default recipe - build the presentation
+default: build
+
+# Build the HTML presentation using Slidy
+build:
+    pandoc -t slidy -s presentation.md -o presentation.html
+
+# Build a self-contained single-file presentation
+build-standalone:
+    pandoc -t slidy -s --self-contained presentation.md -o presentation.html
+
+# Clean generated files
+clean:
+    rm -f presentation.html presentation.pdf presentation.pptx
+
+# Watch for changes and rebuild
+watch:
+    just build && fswatch -o presentation.md | xargs -n1 -I{} just build
+```
+
+And now let's build our new presentation:
+
+```bash
+just build
+```
+
+This generates `presentation.html` which you can open in any browser. Use the arrow keys to navigate between slides. The Slidy format provides a clean, professional look that's perfect for engineering presentations.
+
+## Tips for Better Presentations
+
+1. **Use level 1 headers (`#`) for new slides** - Each `#` starts a new slide
+2. **Use level 2 headers (`##`) for slide sections** - These appear as subheadings
+3. **Include code blocks** - Pandoc preserves syntax highlighting
+4. **Add diagrams with ASCII art or images** - Visuals help explain complex systems
+5. **Use `--self-contained`** - Creates a single HTML file that's easy to share
+
+---
+pub_date: 2026-02-06
+---
+summary: Learn how to create engineering-focused presentations using pandoc and Slidy. Write your slides in Markdown, version control them with your code, and generate HTML, PDF, or PowerPoint outputs. Perfect for technical teams who prefer code over GUIs.
