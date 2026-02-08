@@ -1,3 +1,4 @@
+README.md
 lektor_plantuml.py
 setup.py
 lektor_plantuml.egg-info/PKG-INFO
