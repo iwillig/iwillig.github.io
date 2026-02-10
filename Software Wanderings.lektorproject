@@ -1,9 +1,11 @@
 [project]
 name = Relections on Software Engineering
 tagline = Thoughts on code, craft, and curiosity
+url = https://iwillig.github.io
 
 [servers.ghpages]
 target = ghpages://iwillig/iwillig.github.io
 
 [packages]
 lektor-markdown-header-anchors = 0.3.1
+lektor-atom = 0.4.0
