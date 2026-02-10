@@ -1,0 +1,34 @@
+title: On Dyslexia, Programming and Lisp.
+---
+author: Ivan Willig
+---
+pub_date: 2026-02-10
+---
+summary: This essay explores the connection between dyslexia and different syntax for programming languages. It explores the idea that for dyslexics, Lisp and S-expression-based languages are ideal programming languages.
+---
+body:
+
+Dyslexia is a difference in the way the brain processes language. It is often defined as the difference between intelligence (vaguely defined via the [fake IQ](https://en.wikipedia.org/wiki/The_Mismeasure_of_Man) test) and a person's ability to read. That is, a dyslexic with normal intelligence will underperform compared to their peers in learning how to read. There are many different theories on what the cause is, but most people believe that there are fundamental differences between the brains of people who have dyslexia and those that do not. In Maryanne Wolf's book, [Dyslexia, Fluency, and the Brain](https://www.goodreads.com/book/show/6090306-dyslexia-fluency-and-the-brain), several essays point to a physical difference in the density of specialized brain cells that the brain uses to process letter shapes. It has become clear recently from fMRIs that dyslexics actually develop unique neural pathways for reading that are located in the right side of the brain compared to the normal left-side-dominated reading pathways. However, a root cause has not been identified, and the jury is still out. Dyslexia varies considerably, with up to 15% of the population experiencing some form of it.
+
+The experience of dyslexia is very interesting. I am dyslexic, and I was diagnosed in the 3rd grade. My dyslexia was more "intense" than some, having both verbal and visual effects. I remember trying to learn to read and struggling with all the letter rotation on the page. PQ DB IL letters all looked the same to me.
+
+The best way to describe it is that my brain was attempting to process these letters for their meaning and would automatically rotate the letter. When you think about it, it actually makes sense. When you pick up an object with your hand that you don't understand, what do most people do? They turn it to look at all sides of the object. That's what my brain does with letters.
+
+Because English letters are not "fixed," there is no inherent difference between the bottom and top of the letter; my brain could not fix the position of the letter on the page. The rotation was intense for me, as I was experiencing rotation in "3D." For me, this made the letter move more on the page and also made the letters even more confusing for me.
+
+It made reading very difficult until my brain was able to fix their position. I did this by adopting what I called the "Sky line" approach. Each word makes a unique shape, like the skyline of buildings in a city. By memorizing the shape of each word in the English language, I could fix the position of the word on the page and overcome this rotation problem. Interestingly enough, once I memorized the shape of most of the words in English, I found this method to be very fast. It may be because I can see the shape of the word quickly, not relying on letter shape.
+
+Frankly, rotation was a nightmare for me, literally. As a child, I remember having dreams/nightmares where I was falling and spinning. I would fall forever, spinning and spinning. I could not orient myself. Once, in this nightmare, I realized my solution. There was no fixed position. My desire to fix the position of the letter, or myself, was a fool's errand. Rotation itself was the only constant; the rotation, in a way, was a fixed position. It's a little difficult to describe, and this "realization" did come to me as a dream, so take it for what you will. I guess I am still spinning.
+
+Anyway, moving on from that, in college I developed an interest in software engineering. Taking a class in C and then quickly learning Python. C and its family of languages are interesting. They are frankly a nightmare of obscure scribbles that had little meaning to me. I think a classic example of this is the ternary conditional operator. This is an operator that I still struggle with. I  rapidly found that Python's whitespace-based syntax was much easier on my spinning brain. Most of the obscure squiggles are removed, and I was able to focus on the semantic meaning of the program. I found that my Sky Line approach for visual memorization works very well for programming languages. Each function or class defines its own shape. Remembering each shape in a large codebase is easier than remembering how to spell my own name.
+
+After college I learned about Lisp, specifically the Clojure programming language. After learning about Clojure, I dove headlong into Scheme and its family of S-expression languages. At last, I had found a language that was seemingly designed for my spinning brain.
+
+Lisp-based languages use S-expressions. These S-expressions form a constant and regular pattern.  All expressions are enclosed in parentheses (). The first symbol is always the function or the macro. The rest of the expressions are arguments to that function or macro. Lisp programming is layers and layers of S-expressions, each with their own shape, making them easy to memorize and locate. I no longer have to worry about the rotation of the ternary conditional operator.
+
+Scheme fascinates me even further. Many of the coding conventions in Scheme encourage people to use full and descriptive function names. I believe this gave my mind a deeper ability to organize the skyline shapes. Maybe you can think of this like the difference between 32-bit and 64-bit pointers in garbage collectors. The longer the function name, the more functions I can store in my mind's working memory.
+
+These experiences leave me wondering what other characteristics we could add to our programming languages that would help people like myself. In general, people with "normal," left-dominated reading pathways have constructed languages. In doing so, they have built language that works effectively for them. These languages are tangles of obscure squiggles, a spinning brain nightmare. This tangle allows for denser packing of meaning into a "smaller" space, easy for normies, or so they think. But I can't help but notice the popularity of languages like Ruby and Python. Both of these languages take approaches that reduce the visual complexity.
+
+I wonder if by reducing the visual complexity, we can instead increase the amount of semantic complexity we can hold in our minds. Dyslexia is common, and many people experience some form of the issues I describe above. Perhaps, we are all suffering from the tyranny of obscure squiggles.
+
