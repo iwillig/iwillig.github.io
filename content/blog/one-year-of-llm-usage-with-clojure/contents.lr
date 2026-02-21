@@ -22,7 +22,7 @@ This essay is a reflection on using LLM agents with the Clojure programming lang
 
 ## Early Adoption and Struggles
 
-It is commonly understood that LLM models are more effective with languages that dominate the training dataset. [Research has shown](https://arxiv.org/abs/2308.13354) that model performance varies significantly based on the volume of training data for each programming language, with Python, JavaScript, and TypeScript being heavily represented in public code repositories. This fact is and was concerning to me. For one, at [Shortcut](https://www.shortcut.com/) we have a large Clojure code base that we have grown, nurtured, and maintained over the last 11 years. We don't have the time, money, or interest in rewriting this to Python or TypeScript simply because state-of-the-art models prefer these languages. Additionally, to me, it does not seem like a good business move to throw out working code. 
+It is commonly understood that LLM models are more effective with languages that dominate the training dataset. [Research has shown](https://arxiv.org/abs/2308.13354) that model performance varies significantly based on the volume of training data for each programming language, with Python, JavaScript, and TypeScript being heavily represented in public code repositories. This fact is and was concerning to me. For one, at [Shortcut](https://www.shortcut.com/) we have a large Clojure code base that we have grown, nurtured, and maintained over the last 11 years. We don't have the time, money, or interest in rewriting this to Python or TypeScript simply because state-of-the-art models prefer these languages. Additionally, to me, it does not seem like a good business move to throw out working code.
 
 With that in mind, we decided to try to teach Claude Code how to write Clojure code well. Quickly, we realized that certain aspects of the way Claude Code is structured by default make it very difficult to work with a large code base like ours. An example of this is that Claude will run the entire test suite after each thing it implements, and running the entire test suite locally on our machine takes several minutes at this point, unfortunately. As Clojure engineers, we prefer tight feedback loops on the REPL. This several-minute-long test suite run was unacceptable to us.
 
@@ -129,7 +129,7 @@ clj-nrepl-eval -p 7889 "(clojure.repl/source filter)"
 
 Despite these breakthroughs, the development flow was still not what I wanted it to be. First, [OpenCode](https://opencode.ai/) seems to consume a large amount of memory. It is a real bummer when you're working with a context window that you have crafted over thirty or forty minutes, and the LLM agent crashes because of the harness. It's a very frustrating experience.
 
-Additionally, I've noticed that [OpenCode](https://opencode.ai/) tries to minimize the output of tool calls and edits. This follows the general industry pattern we see in Claude Code, where certain information is hidden from the engineer. It's unclear to me what the exact design goals are, but I believe they're trying to minimize the information the developer sees so as not to overwhelm them.
+Additionally, I've noticed that [OpenCode](https://opencode.ai/) tries to minimize the output of tool calls. This follows the general industry pattern we see in Claude Code, where certain information is hidden from the engineer. It's unclear to me what the exact design goals are, but I believe they're trying to minimize the information the developer sees so as not to overwhelm them.
 
 However, when you're refining your system prompts and thinking carefully about your LLM interactions, this hiding of information becomes a real hindrance. I want to know that my tool calls are correct, that my edits are clear, and that my system functions as effectively as possible.
 
@@ -155,13 +155,13 @@ I also think it would be worthwhile to begin to curate all the tools that indivi
 
 I think there is a tendency among certain users of LLMs to limit the platforms and languages that we use with the LLMs. Out of the box, there are good reasons to consider this. If I were working on a greenfield project, I might consider using something like Python. However, I believe software decisions should serve the needs of the people who work on it and with it, not the needs of the LLM that might play a role creating it.
 
-Ultimately, human beings are responsible for managing these software systems, and human knowledge still, in my view, trumps LLM statistical output. Taking that into consideration, the artifact produced by the LLM process is still a critical part of software development. I prefer to debug and deploy Clojure JVM artifacts, and I know many other organizations do as well. 
+Ultimately, human beings are responsible for managing these software systems, and human knowledge still, in my view, trumps LLM statistical output. Taking that into consideration, the artifact produced by the LLM process is still a critical part of software development. I prefer to debug and deploy Clojure JVM artifacts, and I know many other organizations do as well.
 
 Also, I think there are important reasons not to abandon all the lessons we've learned over the last twenty years of using Clojure. Clojure itself eliminates a whole set of common engineering problems like statefulness. I don't see the advantage of going back to a language where we have to use mutable state for iteration, for example, or a language where functional idioms are not the default.
 
 My experiences with using an LLM for software engineering and developing an LLM have taught me that, rather than constraining the platforms we use and adopt, the LLM era could actually free us. The idea that LLMs are only good at something because it's in the training set ignores the tools, skills, and system prompts that we can apply post-training.
 
-We can craft and refine LLMs for our specific platform. Not only that, there is something beautiful about LLMs: instead of narrowing how we work, they can allow people to work in very different ways. 
+We can craft and refine LLMs for our specific platform. Not only that, there is something beautiful about LLMs: instead of narrowing how we work, they can allow people to work in very different ways.
 
 I hope this blog post was insightful and informative, and I hope that my experience and our experience at [Shortcut](https://www.shortcut.com/) can help you craft and shape an LLM experience that solves your particular engineering problems. Thank you for reading.
 
