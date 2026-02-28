@@ -8,15 +8,15 @@ This is a collection of open-source projects I am currently working on (as of 20
 
 ## [Clojure System Prompt](https://github.com/iwillig/clojure-system-prompt)
 
-An LLM system prompt focused on the Clojure language
+A specialized system prompt that improves LLM coding assistants when working with Clojure. Because niche languages receive far less training data than mainstream ones, LLMs often hallucinate nonexistent function names or produce non-idiomatic code. This prompt enforces REPL-first development — validating code in the Clojure REPL before writing it to disk — and provides explicit guidance on threading macros, functional patterns, and naming conventions. Compatible with Claude Code, pi Agent, and opencode. Includes Python-based token compression utilities that can reduce prompt size by up to 20x while preserving the essential instructions.
 
 ## [Awesome Clojure LLM](https://github.com/iwillig/awesome-clojure-llm)
 
-A collection of tools from the Clojure community related to using LLMs
+A curated list of tools and libraries for integrating LLMs with Clojure development. Covers MCP server implementations, editor integrations (including Calva Backseat Driver for VS Code), Clojure libraries for building LLM applications, CLI tools, and recommended open-weight models. A one-stop reference for anyone doing AI-assisted Clojure development or building LLM-powered applications in Clojure.
 
 ## [Agentic Engineering with Clojure](https://www.iwillig.me/agentic-engineering-with-clojure/)
 
-A manual for working with the Clojure programming language and LLM agents.
+A manual making the case that Clojure's functional paradigm and REPL-driven workflow are unusually well-suited to the age of agentic development. Covers toolchain setup (OpenCode, pi Agent, Clojure MCP), REPL-based workflows with LLM agents, and testing strategies. Addresses both using agents to write Clojure and building agents in Clojure itself.
 
 
 
