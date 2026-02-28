@@ -1,0 +1,22 @@
+_model: page
+---
+title: Projects
+---
+body:
+
+This is a collection of open-source projects I am currently working on (as of 2026). They are mostly focused on LLM Agents.
+
+## [Clojure System Prompt](https://github.com/iwillig/clojure-system-prompt)
+
+An LLM system prompt focused on the Clojure language
+
+## [Awesome Clojure LLM](https://github.com/iwillig/awesome-clojure-llm)
+
+A collection of tools from the Clojure community related to using LLMs
+
+## [Agentic Engineering with Clojure](https://www.iwillig.me/agentic-engineering-with-clojure/)
+
+A manual for working with the Clojure programming language and LLM agents.
+
+
+
