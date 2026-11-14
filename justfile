@@ -23,11 +23,11 @@ resume-pdf: resume
 
 # Run lektor server for development
 serve:
-    lektor serve
+    pipenv run lektor serve
 
 # Build the site with lektor
 build:
-    lektor build
+    pipenv run lektor build
     @echo "Site built successfully"
 
 # Build everything (resume + site)
@@ -37,11 +37,11 @@ build-all: resume build
 clean:
     rm -f {{output_dir}}/resume.html
     rm -f {{output_dir}}/resume.pdf
-    lektor clean --yes
+    pipenv run lektor clean --yes
 
 # Deploy to GitHub Pages
 deploy: resume
-    lektor deploy ghpages
+    pipenv run lektor deploy ghpages
 
 # Watch resume source and rebuild on changes (requires entr)
 watch-resume:
